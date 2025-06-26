@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 import type { CourseData } from "@shared/schema";
 
 const ai = new GoogleGenAI({ 
-  apiKey: process.env.GEMINI_API_KEY || "AIzaSyDJEOwgYfC1MWF-X4cuL8D4Vri-U0cRpJU" 
+  apiKey: process.env.GEMINI_API_KEY! 
 });
 
 export async function generateCourse(topic: string, difficulty: string): Promise<CourseData> {
