@@ -24,8 +24,9 @@ This is a full-stack AI-powered course generation application built with React, 
 ### Database & Storage
 - **Primary Database**: PostgreSQL (configured via Drizzle ORM)
 - **ORM**: Drizzle ORM with TypeScript schema definitions
-- **Fallback Storage**: In-memory storage implementation for development
+- **Connection**: Neon Database with connection pooling
 - **Schema Location**: Shared schema definitions in `/shared/schema.ts`
+- **Database File**: Database connection and setup in `/server/db.ts`
 
 ## Key Components
 
@@ -109,6 +110,9 @@ This is a full-stack AI-powered course generation application built with React, 
 - June 26, 2025: Added sample courses (Machine Learning, Photography, Finance)
 - June 26, 2025: Improved error handling for API rate limits
 - June 26, 2025: Application fully functional with attractive UI
+- June 26, 2025: Added PostgreSQL database integration with Drizzle ORM
+- June 26, 2025: Migrated from in-memory storage to persistent database storage
+- June 26, 2025: Created database seeding functionality for sample courses
 
 ## User Preferences
 
