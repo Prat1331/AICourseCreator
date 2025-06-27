@@ -1,78 +1,82 @@
-# 🧠 AI Course Builder
+🔗 Live App: https://aicoursebuilder.netlify.app
 
-An AI-powered full-stack web application that generates educational courses based on a topic and difficulty level. Built with **React**, **Express**, **TypeScript**, **Tailwind CSS**, and integrated with **Google Gemini AI** for content generation.
+🧠 AI Course Builder
+An AI-powered full-stack web application that automatically generates rich educational courses tailored to a given topic and difficulty level. Leveraging the power of Google Gemini AI, it crafts structured modules, lessons, objectives, and exercises in seconds — helping educators, students, and lifelong learners build knowledge efficiently.
 
----
+🚀 Key Features
+📚 AI-Generated Courses: Structured modules, lessons, objectives, and exercises on demand.
 
-## 🚀 Features
+🔍 Custom Input: Users enter a topic and difficulty level to get tailored content.
 
-- 📚 Generate courses with structured modules and lessons using AI
-- 🔍 Input topic and difficulty level to get dynamic course content
-- 🎨 Responsive UI with Tailwind CSS + shadcn/ui
-- 🗃️ PostgreSQL database using Drizzle ORM
-- 🔌 REST API backend with Express and TypeScript
-- ⚙️ Clean architecture with full-stack TypeScript
-- 🌐 SPA-friendly deployment via Netlify with `_redirects`
+🎨 Sleek UI: Built with Tailwind CSS and shadcn/ui for a modern, responsive interface.
 
----
+🗃️ Database Integration: Uses PostgreSQL with Drizzle ORM for seamless data handling.
 
-## 🧱 Tech Stack
+🔌 RESTful API: Backend built in Express with full TypeScript support.
 
-### 🔧 Frontend
-- React 18 + TypeScript
-- Tailwind CSS + shadcn/ui
-- Radix UI primitives
-- Wouter for client-side routing
-- Vite as build tool
+⚙️ End-to-End TypeScript: Clean, scalable architecture from client to server.
 
-### 🛠 Backend
-- Node.js + Express (ESM)
-- TypeScript
-- Drizzle ORM (PostgreSQL)
-- Google Gemini AI API
-- dotenv for environment variables
+🌐 SPA-Friendly Deployment: Uses _redirects file for smooth Netlify hosting.
 
----
+🧱 Tech Stack
+🔧 Frontend
+React 18 + TypeScript
 
-## 🗃️ Folder Structure
+Tailwind CSS + shadcn/ui
 
-.
-├── client/
-│ ├── public/
-│ │ ├── _redirects
-│ │ └── index.html
-│ └── src/
-│ └── ... (components, pages, hooks, etc.)
-├── server/
-│ ├── db.ts
-│ ├── index.ts
-│ └── routes/
-│ └── courseRoutes.ts
-├── shared/
-│ └── schema.ts
-├── drizzle.config.ts
-├── package.json
-├── .env
-└── README.md
+Radix UI primitives
 
-yaml
+Wouter for routing
+
+Vite as build tool
+
+🛠 Backend
+Node.js + Express (ESM)
+
+TypeScript
+
+Drizzle ORM (PostgreSQL)
+
+Google Gemini AI API
+
+dotenv for environment management
+
+📁 Folder Structure
+pgsql
 Copy
 Edit
+.
+├── client/
+│   ├── public/
+│   │   ├── _redirects
+│   │   └── index.html
+│   └── src/ (components, pages, hooks, etc.)
+├── server/
+│   ├── db.ts
+│   ├── index.ts
+│   └── routes/
+│       └── courseRoutes.ts
+├── shared/
+│   └── schema.ts
+├── drizzle.config.ts
+├── .env
+├── package.json
+└── README.md
+🧪 Getting Started
+Clone the repository
 
----
-
-## 🧪 Getting Started
-
-### 1. Clone the repository
-```bash
+bash
+Copy
+Edit
 git clone https://github.com/your-username/ai-course-builder.git
 cd ai-course-builder
-2. Install dependencies
+Install dependencies
+
 bash
 Copy
 Edit
 npm install
-3. Setup environment variables
+Set up environment variables
 Create a .env file in the root:
 
 env
@@ -81,12 +85,14 @@ Edit
 DATABASE_URL=your_postgres_connection_string
 GEMINI_API_KEY=your_gemini_api_key
 NODE_ENV=development
-4. Push DB schema
+Push DB schema
+
 bash
 Copy
 Edit
 npm run db:push
-5. Start the app
+Start the app
+
 bash
 Copy
 Edit
@@ -96,21 +102,16 @@ Frontend: http://localhost:5173
 Backend API: http://localhost:5050/api
 
 🌐 Deployment
-Frontend
-Built using Vite
+Frontend (Netlify)
 
-_redirects file ensures SPA routing on Netlify
+Built with Vite
 
-Build command:
+_redirects handles SPA routing
 
-bash
-Copy
-Edit
-npm run build
-Deploy dist/public/ folder to Netlify
+Deploy dist/public/ folder
 
 Backend (Optional)
-Use services like:
+Can be hosted on:
 
 Render
 
@@ -119,20 +120,19 @@ Railway
 Fly.io
 
 🧠 AI Integration
-Uses Google Gemini AI to generate:
+Utilizes Google Gemini AI to generate:
 
-Modules
+📘 Course Modules
 
-Lessons
+🎓 Lesson Plans
 
-Objectives
+🎯 Learning Objectives
 
-Exercises
+🧩 Practice Exercises
 
 🙌 Credits
 Built by Pratham Gera
-
 Dataset validation & feedback by Sport Arena
-
 UI powered by shadcn/ui + Tailwind CSS
+
 
