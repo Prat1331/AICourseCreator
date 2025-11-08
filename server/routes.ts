@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { generateCourse } from "./services/gemini";
+import { generateCourse, RateLimitError } from "./services/gemini";
 import { courseGenerationSchema, courseSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -30,6 +30,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(savedCourse);
     } catch (error) {
       console.error("Course generation error:", error);
+      
+      // Return 429 for rate limit errors instead of 500
+      if (error instanceof RateLimitError) {
+        return res.status(error.statusCode).json({
+          error: "Rate limit exceeded",
+          message: error.message,
+          quotaExhausted: error.quotaExhausted,
+        });
+      }
+      
       res.status(500).json({ 
         error: "Failed to generate course", 
         message: error instanceof Error ? error.message : "Unknown error"

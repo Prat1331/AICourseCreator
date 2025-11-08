@@ -14,6 +14,20 @@ const ai = new GoogleGenAI({
 const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 /**
+ * Custom error class for rate limit errors
+ */
+export class RateLimitError extends Error {
+  constructor(
+    message: string,
+    public readonly statusCode: number = 429,
+    public readonly quotaExhausted: boolean = false
+  ) {
+    super(message);
+    this.name = "RateLimitError";
+  }
+}
+
+/**
  * Detects if an error is a rate limit or quota-related issue
  */
 function isRateLimitError(err: any): boolean {
@@ -91,6 +105,14 @@ class RequestQueue {
 const requestQueue = new RequestQueue();
 
 /**
+ * Checks if quota is completely exhausted (quota_limit_value is 0)
+ */
+function isQuotaExhausted(err: any): boolean {
+  const quota = err?.error?.details?.[0]?.metadata?.quota_limit_value;
+  return quota === "0" || quota === 0;
+}
+
+/**
  * Exponential backoff for rate limit retries
  */
 async function retryWithBackoff<T>(
@@ -108,6 +130,12 @@ async function retryWithBackoff<T>(
 
       if (!isRateLimitError(err)) {
         console.error("❌ Non-rate-limit error:", err);
+        throw err;
+      }
+
+      // If quota is exhausted (0), don't retry - it won't help
+      if (isQuotaExhausted(err)) {
+        console.error("🚫 Quota completely exhausted (limit is 0). Skipping retries.");
         throw err;
       }
 
@@ -198,14 +226,18 @@ Ensure it's practical, engaging, and includes examples & exercises.`;
     console.error("🚨 Course generation failed:", err);
 
     if (isRateLimitError(err)) {
-      const quota = err?.error?.details?.[0]?.metadata?.quota_limit_value;
-      if (quota === "0" || quota === 0) {
-        throw new Error(
-          "AI service quota exhausted. Please contact support or try again later."
+      const quotaExhausted = isQuotaExhausted(err);
+      if (quotaExhausted) {
+        throw new RateLimitError(
+          "AI service quota has been completely exhausted. Please contact support or try again later. You can explore our sample courses while you wait.",
+          429,
+          true
         );
       }
-      throw new Error(
-        "AI service is temporarily busy. Please try again in a few minutes."
+      throw new RateLimitError(
+        "AI service is temporarily busy. Please try again in a few minutes, or explore our sample courses while you wait.",
+        429,
+        false
       );
     }
 
@@ -249,11 +281,19 @@ Return clean, well-formatted text.`;
     console.error("🚨 Lesson content generation failed:", err);
 
     if (isRateLimitError(err)) {
-      const quota = err?.error?.details?.[0]?.metadata?.quota_limit_value;
-      if (quota === "0" || quota === 0) {
-        throw new Error("AI service quota exhausted. Try again later.");
+      const quotaExhausted = isQuotaExhausted(err);
+      if (quotaExhausted) {
+        throw new RateLimitError(
+          "AI service quota has been completely exhausted. Please contact support or try again later.",
+          429,
+          true
+        );
       }
-      throw new Error("AI service is temporarily busy. Please retry soon.");
+      throw new RateLimitError(
+        "AI service is temporarily busy. Please try again in a few minutes.",
+        429,
+        false
+      );
     }
 
     throw new Error("Lesson content generation failed.");

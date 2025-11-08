@@ -30,11 +30,17 @@ export default function HeroSection({ onCourseGenerated }: HeroSectionProps) {
       });
       onCourseGenerated(course);
     },
-    onError: (error: Error) => {
+    onError: (error: Error & { status?: number; data?: any }) => {
+      const isRateLimit = error.status === 429;
+      const quotaExhausted = error.data?.quotaExhausted;
+      
       toast({
-        title: "Course Generation Failed",
+        title: isRateLimit 
+          ? (quotaExhausted ? "Quota Exhausted" : "Rate Limit Exceeded")
+          : "Course Generation Failed",
         description: error.message || "Please try again with a different topic.",
         variant: "destructive",
+        duration: isRateLimit ? 8000 : 5000, // Show rate limit errors longer
       });
     },
   });
