@@ -33,7 +33,7 @@ export async function apiRequest(
   url: string,
   data?: unknown
 ): Promise<Response> {
-  const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+  const BASE_URL = import.meta.env.VITE_BACKEND_URL || "";
   const res = await fetch(`${BASE_URL}${url}`, {
     method,
     headers: data ? { "Content-Type": "application/json" } : {},
@@ -52,7 +52,7 @@ export function getQueryFn<T>({ on401: unauthorizedBehavior }: {
   on401: UnauthorizedBehavior;
 }): QueryFunction<T> {
   return async ({ queryKey }) => {
-    const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL || "";
     const res = await fetch(`${BASE_URL}${queryKey[0]}`, {
       credentials: "include",
     });
