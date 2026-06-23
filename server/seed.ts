@@ -2,6 +2,11 @@ import { db } from "./db";
 import { courses } from "@shared/schema";
 
 async function seedDatabase() {
+  if (!db) {
+    console.log("⚠️ No DATABASE_URL set, seeding skipped.");
+    return;
+  }
+  const database = db;
   console.log("Seeding database with sample courses...");
 
   const sampleCourses = [
@@ -97,12 +102,12 @@ async function seedDatabase() {
 
   try {
     // Check if courses already exist
-    const existingCourses = await db.select().from(courses);
+    const existingCourses = await database.select().from(courses);
     
     if (existingCourses.length === 0) {
       // Insert sample courses
       for (const courseData of sampleCourses) {
-        await db.insert(courses).values(courseData);
+        await database.insert(courses).values(courseData);
       }
       console.log("✅ Sample courses added to database");
     } else {

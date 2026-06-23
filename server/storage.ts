@@ -16,17 +16,17 @@ export interface IStorage {
 
 export class DatabaseStorage implements IStorage {
   async getUser(id: number): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.id, id));
+    const [user] = await db!.select().from(users).where(eq(users.id, id));
     return user || undefined;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.username, username));
+    const [user] = await db!.select().from(users).where(eq(users.username, username));
     return user || undefined;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const [user] = await db
+    const [user] = await db!
       .insert(users)
       .values(insertUser)
       .returning();
@@ -34,7 +34,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createCourse(insertCourse: InsertCourse): Promise<Course> {
-    const [course] = await db
+    const [course] = await db!
       .insert(courses)
       .values(insertCourse)
       .returning();
@@ -42,17 +42,17 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getCourse(id: number): Promise<Course | undefined> {
-    const [course] = await db.select().from(courses).where(eq(courses.id, id));
+    const [course] = await db!.select().from(courses).where(eq(courses.id, id));
     return course || undefined;
   }
 
   async getAllCourses(): Promise<Course[]> {
-    return await db.select().from(courses).orderBy(desc(courses.createdAt));
+    return await db!.select().from(courses).orderBy(desc(courses.createdAt));
   }
 
   async searchCourses(query: string): Promise<Course[]> {
     const searchPattern = `%${query.toLowerCase()}%`;
-    return await db.select().from(courses).where(
+    return await db!.select().from(courses).where(
       or(
         like(courses.title, searchPattern),
         like(courses.topic, searchPattern)
@@ -61,7 +61,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getCoursesByDifficulty(difficulty: string): Promise<Course[]> {
-    return await db.select().from(courses).where(eq(courses.difficulty, difficulty)).orderBy(desc(courses.createdAt));
+    return await db!.select().from(courses).where(eq(courses.difficulty, difficulty)).orderBy(desc(courses.createdAt));
   }
 }
 
@@ -242,4 +242,4 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new DatabaseStorage();
+export const storage = process.env.DATABASE_URL ? new DatabaseStorage() : new MemStorage();
