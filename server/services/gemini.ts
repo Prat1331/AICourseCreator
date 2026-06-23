@@ -28,24 +28,26 @@ export class RateLimitError extends Error {
 }
 
 /**
- * Detects if an error is a rate limit or quota-related issue
+ * Detects if an error is a rate limit, quota-related, or temporary service issue
  */
 function isRateLimitError(err: any): boolean {
   if (!err) return false;
 
   const message = String(err.message || err.error?.message || "");
-  const code = err.status || err.error?.code || "";
-  const status = err.error?.status || "";
+  const code = String(err.status || err.error?.code || "");
+  const status = String(err.error?.status || "");
   const errStr = String(err);
 
   if (
-    code === 429 ||
-    err.error?.code === 429 ||
+    code === "429" ||
+    code === "503" ||
     status === "RESOURCE_EXHAUSTED" ||
-    message.match(/quota|RATE_LIMIT|RESOURCE_EXHAUSTED|Quota exceeded/i) ||
-    errStr.includes("429")
+    status === "UNAVAILABLE" ||
+    message.match(/quota|RATE_LIMIT|RESOURCE_EXHAUSTED|Quota exceeded|high demand|temporarily busy|UNAVAILABLE/i) ||
+    errStr.includes("429") ||
+    errStr.includes("503")
   ) {
-    console.log("⚠️ Rate limit detected:", {
+    console.log("⚠️ Temporary service issue detected (will retry):", {
       status: err.status,
       code: err.error?.code,
       statusText: err.error?.status,
@@ -235,8 +237,8 @@ Ensure it's practical, engaging, and includes examples & exercises.`;
         );
       }
       throw new RateLimitError(
-        "AI service is temporarily busy. Please try again in a few minutes, or explore our sample courses while you wait.",
-        429,
+        "AI service is temporarily busy handling high demand. Please try again in a moment, or explore our sample courses while you wait.",
+        503,
         false
       );
     }
